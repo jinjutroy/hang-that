@@ -1,10 +1,8 @@
 import { React,Component } from 'react';
-import './App.css';
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import Header from '../components/Header/Header.js'
-import HelloWorld from "../components/hello-world/helloworld.js";
-
+import './App.css'; 
+import Header from '../components/Header/Header.js' 
+import Footer from "../components/Footer/Footer.js"; 
+import "bootstrap/dist/css/bootstrap.min.css"; 
 
 export default class App extends Component {
   // constructor(props) {
@@ -14,12 +12,12 @@ export default class App extends Component {
   UserPage = () => {
    return (
      <div className="App">
-       <div>
+       <header>
          <Header />
-       </div>
-       <div className="hello-world">
-         <HelloWorld/>
-       </div>
+       </header>
+       <footer>
+         <Footer />
+       </footer>
      </div>
    );
   } 

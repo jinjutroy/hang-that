@@ -1,11 +1,244 @@
-.header{
-    height: 60px;
-    background-color: green;
-    width: 100%; 
-    text-align: center;
+header {
+    /* height: 700px; */
+    background-color: rgba(75, 210, 150, 0.5);
+    position: relative;
 }
-.header h1{
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    top: 0;
+}
+
+.header-logo {
+    font-size: 2.5rem;
+    cursor: pointer;
+    margin: 0;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    /* text-transform: uppercase; */
+}
+
+.menu-icon {
+    font-size: 2.5rem;
+    transition: all 0.3s;
+    display: none;
+}
+
+.menu-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    gap: 10px;
     margin: 0;
     padding: 0;
-    line-height: 1.5;
+    font-size: 1.6rem;
+}
+
+
+.menu-item__title {
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    line-height: 40px;
+}
+
+.nav-links {
+    color: #030303;
+    text-decoration: none;
+}
+
+
+.nav-links-mobile:hover,
+.nav-links:hover {
+    /* background-color: #4AD295; */
+    transition: 250ms;
+    color: #fff;
+}
+
+.nav-links-mobile {
+    display: none;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 100px;
+}
+
+.header__title {
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 55px;
+    padding: 15px 0;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #030303;
+}
+
+.header__slogan {
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #181818;
+    margin-bottom: 40px;
+
+}
+
+.header__get-apps {
+    margin-top: 40px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #030303;
+}
+
+.header__get-apps a {
+    text-decoration: none;
+    color: #0038FF;
+    font-weight: 700;
+}
+
+.header__img-download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header__img-download a {
+    width: 125px;
+
+}
+
+.scheme-item {
+    /* width: 330px; */
+    height: 300px;
+    transform: translateY(50%);
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 35px 40px;
+    margin: 10px 20px;
+    cursor: pointer;
+}
+
+.scheme-item:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.scheme__icon {
+    width: 7rem;
+    height: 7.6rem;
+
+}
+
+.scheme__title {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: 0.1px;
+    color: #252B42;
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.scheme__line {
+    height: 2px;
+    width: 25%;
+    background: #E74040;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.scheme__desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #737373;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .nav-links-mobile,
+    .menu-icon {
+        display: block;
+    }
+
+    .btn-signIn {
+        display: none;
+    }
+
+    .menu-item:hover .nav-links-mobile {
+
+        background-color: #fff;
+        color: #000;
+    }
+
+    .menu-item:hover .menu-item__title {
+        background-color: rgba(0, 0, 0, 0.1);
+        transition: 250ms;
+        color: #000;
+    }
+
+    .menu-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        text-align: center;
+        opacity: 1;
+        transition: all 0.5s ease;
+        left: -110%;
+        width: 100%;
+        gap: 0;
+        padding-bottom: 10px;
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.3);
+
+    }
+
+    .menu-item {
+        width: 100%;
+    }
+
+    .menu-item__title {
+        width: 100%;
+    }
+
+    .menu-list.active {
+        background-color: rgba(75, 210, 150);
+        left: 0;
+
+    }
+
+    .nav-links-mobile {
+        text-decoration: none;
+        width: 80%;
+        background-color: #4ad9e4;
+        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+        color: #303030;
+        margin-inline: auto;
+    }
+
 }
