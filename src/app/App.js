@@ -1,13 +1,14 @@
 import { React,Component } from 'react';
+import "bootstrap/dist/css/bootstrap.min.css"; 
 import './App.css'; 
 import Header from '../components/Header/Header.js' 
 import Footer from "../components/Footer/Footer.js"; 
-import "bootstrap/dist/css/bootstrap.min.css"; 
+import SectionHeader from '../components/SectionHeader/SectionHeader';
 
-export default class App extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+import Scheme from '../components/Scheme/Scheme'
+import SectionTopService from '../components/SectionTopService/SectionTopService';
+import OurHero from '../components/OurHero/OurHero';
+export default class App extends Component { 
 
   UserPage = () => {
    return (
@@ -15,6 +16,11 @@ export default class App extends Component {
        <header>
          <Header />
        </header>
+       <div className="section-header"></div>
+        <SectionHeader />
+        <Scheme />
+        <SectionTopService/> 
+        <OurHero/>
        <footer>
          <Footer />
        </footer>

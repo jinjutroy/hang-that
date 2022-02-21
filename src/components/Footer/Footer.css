@@ -1,3 +1,44 @@
-footer{
-    height: 1000px;
+footer {
+    padding-top: 40px;
+    font-family: "Open Sans", sans-serif;
 }
+
+.copyright {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    border-top: 1px solid rgba(0, 0, 0, 0.301);
+    line-height: 60px;
+}
+
+.footer-item {
+    padding-bottom: 20px; 
+    text-align: center;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: #030303;
+    font-size: 1.2rem;
+}
+
+.footer-link:hover {
+    color: #030303bd;
+}
+
+.footer-item__title {
+    line-height: 32px;
+} 
+ .footer-download-app img{ 
+     padding: 10px;
+     max-width: 170px;
+ }
+ .footer-item__title-head{
+     font-size: 1.6rem;
+     padding: 0 20px ;
+ }
+ .footer-item__download{
+     padding: 10px;
+     font-size: 1.3rem; 
+     padding-left: 30px;
+ }
