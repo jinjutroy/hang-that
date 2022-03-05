@@ -64,9 +64,9 @@ export default function Footer() {
             xs={12}
           >
             <h2 className="footer-item__title">Contact</h2>
-            {Contact.map((contact) => {
+            {Contact.map((contact, index) => {
               return (
-                <a className="footer-link" href={contact.link}>
+                <a key={index} className="footer-link" href={contact.link}>
                   <p>{contact.title}</p>
                 </a>
               );
@@ -82,9 +82,9 @@ export default function Footer() {
             xs={12}
           >
             <h2 className="footer-item__title">About</h2>
-            {About.map((about) => {
+            {About.map((about, index) => {
               return (
-                <a className="footer-link" href={about.link}>
+                <a key={index} className="footer-link" href={about.link}>
                   <p>{about.title}</p>
                 </a>
               );
@@ -100,9 +100,9 @@ export default function Footer() {
             xs={12}
           >
             <h2 className="footer-item__title">Support</h2>
-            {Support.map((support) => {
+            {Support.map((support,index) => {
               return (
-                <a className="footer-link" href={support.link}>
+                <a key={index}  className="footer-link" href={support.link}>
                   <p>{support.title}</p>
                 </a>
               );

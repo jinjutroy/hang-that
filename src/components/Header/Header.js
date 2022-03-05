@@ -5,6 +5,7 @@ import { MenuItems} from "./MenuItems";
 
 
 import { Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 
 function SchemeContainer({MenuItems, state}) { 
@@ -13,10 +14,10 @@ function SchemeContainer({MenuItems, state}) {
       {MenuItems.map((item, index) => {
         return (
           <li className="menu-item" key={index}>
-            <a className={item.cName} href={item.url}>
+            <Link className={item.cName} to={item.url}>
               <i className={item.icon + `   desktop`}></i>
               <div className="menu-item__title"> {item.title}</div>
-            </a>
+            </Link>
           </li>
         );
       })}
@@ -30,20 +31,20 @@ export default function Header() {
   const [clicked, setClicked] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [scrollNavbar, setScrollNavbar] = useState();
+ 
   const handleScroll = () => {
     const position = window.pageYOffset;  
     setScrollNavbar(position);
      setClicked(false);
-    if (position > 200) { 
+    if (position > 200 ) {
       document.querySelector("header").classList.add("header-text-scroll");
-    }  else{
-       document.querySelector("header").classList.remove("header-text-scroll");
+    } else  {
+      document.querySelector("header").classList.remove("header-text-scroll");
     }
   };
 
    useEffect(() => {
-     window.addEventListener("scroll", handleScroll);
-    
+     window.addEventListener("scroll", handleScroll); 
      return () => {
        window.removeEventListener("scroll", handleScroll);
      };
@@ -58,7 +59,10 @@ export default function Header() {
       <div className="fluid">
         <Container>
           <div className="header">
-            <h1 className="header-logo">Hang That</h1>
+            <Link className="header-logo" to="/">
+              <h1>Hang That</h1>
+            </Link>
+
             <div className="menu-icon" onClick={() => setClicked(!clicked)}>
               <i className={showNavbar ? "fas fa-times" : "fas fa-bars"}></i>
             </div>

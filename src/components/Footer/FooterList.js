@@ -57,21 +57,4 @@ export const Contact = [
 export const Content = {
     title: "Hang that là ứng dụng giúp  kiểm soát sự thật và giả ",
 }
-export const Link = [
-  {
-    icon: "",
-    link: "/call-centre",
-  },
-  {
-    icon: "Email Us",
-    link: "/email-us",
-  },
-  {
-    icon: "Terms & Coditions",
-    link: "/terms-coditions",
-  },
-  {
-    icon: "Help Centre",
-    link: "/help-centre",
-  },
-];
+ 

@@ -2,7 +2,7 @@
    {
      icon: `fas fa-search`,
      title: "Tra cứu",
-     url: "#",
+     url: "/tracuu",
      cName: "nav-links",
    },
    {
