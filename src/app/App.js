@@ -10,7 +10,8 @@ import Scheme from '../components/Scheme/Scheme'
 import SectionTopService from '../components/SectionTopService/SectionTopService';
 import OurHero from '../components/OurHero/OurHero'; 
 import DetailProduct from '../components/DetailProduct/DetailProduct';
-import HeaderSearch from '../components/HeaderSearch/HeaderSearch';
+import HeaderSearch from '../components/HeaderSearch/HeaderSearch';  
+import  "../models/firebase";
 export default class App extends Component {
   UserPage = () => {
     return (

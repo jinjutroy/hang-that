@@ -29,12 +29,10 @@ function SchemeContainer({MenuItems, state}) {
 }
 export default function Header() {  
   const [clicked, setClicked] = useState(false);
-  const [showNavbar, setShowNavbar] = useState(true);
-  const [scrollNavbar, setScrollNavbar] = useState();
+  const [showNavbar, setShowNavbar] = useState(true); 
  
   const handleScroll = () => {
-    const position = window.pageYOffset;  
-    setScrollNavbar(position);
+    const position = window.pageYOffset;   
      setClicked(false);
     if (position > 200 ) {
       document.querySelector("header").classList.add("header-text-scroll");

@@ -2,7 +2,7 @@
    {
      icon: `fas fa-search`,
      title: "Tra cứu",
-     url: "/tracuu",
+     url: "/tracuu?makeby=50500&item=1004",
      cName: "nav-links",
    },
    {
