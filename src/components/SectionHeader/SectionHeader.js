@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React,{ Component } from "react";
 import { Button } from "../Button/Button";
 import ggplay from "../../images/ggplay.webp";
 import appstore from "../../images/appstore.webp";

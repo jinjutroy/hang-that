@@ -1,8 +1,9 @@
 import { child, get, getDatabase, ref } from "firebase/database";
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap"; 
 import QRCode from "react-qr-code";
 import {  useSearchParams } from "react-router-dom";
+import Loading from "../Loading/Loading";
 import { Notification } from "../Notification/Notification";
 import "./DetailProduct.css";
 
@@ -11,7 +12,8 @@ export default function DetailProduct(props) {
   const [searchParams, setSearchParams] = useSearchParams();    
   const [infoProducer, setInfoProducer] = useState([]);
   const [infoCustomer,setInfoCustomer] = useState([]);
-  
+  const [checkinfo,setCheckinfo] = useState(false);
+  const [lastcus, setLastcus] = useState({});
   const getProducer = (arr,item)=>{
     const getInfoProducer = arr[2]; 
     let email = arr[3];
@@ -27,7 +29,7 @@ export default function DetailProduct(props) {
     if(email && quantity !== 0 && date){  
       return [email,date,quantity] 
     }
-    return []
+    return [] 
   }
   const getCustomer = (arr,item) => { 
     const getInfoCustomer = arr[2][item]['history'];
@@ -35,19 +37,26 @@ export default function DetailProduct(props) {
     let quantity = 0;
     let cusId = '';
     let listCus = [];
+    let total = 0;
     if(getInfoCustomer){  
-      for(const i in (getInfoCustomer)){
+      for(const i in getInfoCustomer){
         let itemHistory = getInfoCustomer[i]; 
         date = new Date(itemHistory["time"]).toLocaleString(); 
         quantity=itemHistory['quantity']; 
         cusId = itemHistory['customerId']; 
-        listCus.push({date,quantity,cusId})
+        listCus.push({date,quantity,cusId}); 
+        total+=itemHistory['quantity'];
       }  
-      console.log(listCus);
+      setLastcus(
+        {
+          datetime: listCus[listCus.length-1].date,
+          total: total
+        }
+      )
       return listCus;
     }  
     return [];
-  }
+  }  
   useEffect(() => {   
     const dbRef = ref(getDatabase());  
     let params = searchParams.get("makeby"); 
@@ -59,20 +68,23 @@ export default function DetailProduct(props) {
         for (const variable in snapshot.val()) {
           arr.push(snapshot.val()[variable])
         } 
-        setListProperties(arr[2][item]["listProperties"]);  
+        if(arr[2][item]===undefined) return;
+        setListProperties(arr[2][item]["listProperties"]); 
         setInfoCustomer(getCustomer(arr,item));
         setInfoProducer(getProducer(arr,item));
       } else {
         console.log("No data available");
         return;
-      }
+      }  
     }).catch((error) => {
       console.error(error);
       return
     }); 
-   }
+    
+    
+   } 
   },[searchParams]) 
- 
+  
   const showInfoToast= () =>{
     Notification({
       title: "Thông báo!",
@@ -95,10 +107,15 @@ export default function DetailProduct(props) {
     let list = document.querySelector(".list-custommer-list__wrapper");
     list.classList.add("hide"); 
     list.classList.remove("show-block");
-  }  
-  console.log(infoCustomer.length);
-  if(infoProducer.length === 0 && infoCustomer.length === 0){
-    return <h1>Loading...</h1>;
+  }   
+ 
+  if (infoProducer.length === 0 && infoCustomer.length === 0) {
+    setTimeout(async() => { 
+      await setCheckinfo(true);
+    }, 3000);
+    return <div className="detail-product-loading">
+      {checkinfo?<div className="no-info-detail-product">Không tìm thấy thông tin của sản phẩm này.</div>: <Loading />}
+    </div>
   }
   return (
     <Container>
@@ -150,8 +167,8 @@ export default function DetailProduct(props) {
               <Row>
                 <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
                   <button onClick={handlerCus} className="list-custommer-item__passersby"> 
-                    <div><span>{ 1}</span> <span>Khách vãng lai</span></div>
-                    <div><span>Số lượng</span><span>{  1}</span></div> 
+                    <div><span>{lastcus.datetime}</span> <span>Khách vãng lai</span></div>
+                    <div><span>Tổng số lượng</span><span>{lastcus.total}</span></div> 
                   </button>
                 </Col>
                 <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
@@ -172,7 +189,7 @@ export default function DetailProduct(props) {
            <button onClick={handlerCloseListCus} className="list-custommer__close"><i className="fas fa-times"></i></button>
            </div>
             {infoCustomer.map((Customer,index) =>{
-                    return <div key={index} className="list-custommer-item__detail">
+                    return <div key={index} className="list-custommer-item__detail"> 
                        <div><span> CustomerID: {Customer.cusId}</span> <span></span></div>
                       <div><span>{Customer.date}</span><span></span></div>
                     </div>

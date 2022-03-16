@@ -198,6 +198,18 @@ font-weight: 500;
 .list-custommer__header button:hover{
     opacity: 0.6;
 }
+
+.detail-product-loading{
+    height: 70vh;
+}
+.no-info-detail-product{
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+    padding-top: 80px;
+}
+
 @media screen and (max-width: 1023px) {
     .detail-product-item{   
         box-shadow: unset; 
@@ -221,5 +233,13 @@ font-weight: 500;
     }
     .detail-customer-in-product__header i {
         display: none;
+    }
+    .list-custommer-item__detail,
+    .list-custommer-item__passersby,
+    .list-producer-item__producer{
+        font-size: 1.2rem;
+    }
+    .no-info-detail-produc{
+        font-size: 20px;
     }
 }

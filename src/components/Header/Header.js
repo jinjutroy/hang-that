@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../Button/Button";
 import "./Header.css";
 import { MenuItems} from "./MenuItems";
@@ -8,13 +8,13 @@ import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 
-function SchemeContainer({MenuItems, state}) { 
+function SchemeContainer({MenuItems, state,scroll}) { 
   return (
     <ul className={state ? "menu-list active" : "menu-list"}>
       {MenuItems.map((item, index) => {
         return (
           <li className="menu-item" key={index}>
-            <Link className={item.cName} to={item.url}>
+            <Link className={scroll?item.cName+" set-color-scroll":item.cName} to={item.url}>
               <i className={item.icon + `   desktop`}></i>
               <div className="menu-item__title"> {item.title}</div>
             </Link>
@@ -30,13 +30,16 @@ function SchemeContainer({MenuItems, state}) {
 export default function Header() {  
   const [clicked, setClicked] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true); 
- 
+  const [scroll,setScroll] = useState(false);
   const handleScroll = () => {
     const position = window.pageYOffset;   
      setClicked(false);
+     console.log(1);
     if (position > 200 ) {
+      setScroll(true);
       document.querySelector("header").classList.add("header-text-scroll");
     } else  {
+      setScroll(false);
       document.querySelector("header").classList.remove("header-text-scroll");
     }
   };
@@ -57,7 +60,7 @@ export default function Header() {
       <div className="fluid">
         <Container>
           <div className="header">
-            <Link className="header-logo" to="/">
+            <Link className={scroll?"header-logo set-color-scroll":"header-logo"} to="/">
               <h1>Hang That</h1>
             </Link>
 
@@ -67,6 +70,7 @@ export default function Header() {
             <SchemeContainer
               MenuItems={MenuItems}
               state={clicked}
+              scroll={scroll}
             ></SchemeContainer>
           </div>
         </Container>
