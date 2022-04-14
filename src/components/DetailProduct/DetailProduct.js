@@ -1,5 +1,5 @@
 import { child, get, getDatabase, ref } from "firebase/database";
-import React,{ useEffect, useState } from "react";
+import React,{ useEffect, useState, useCallback } from "react";
 import { Col, Container, Row } from "react-bootstrap";  
 import { QRCode } from "react-qrcode-logo";
 import {  useSearchParams } from "react-router-dom";
@@ -16,6 +16,7 @@ export default function DetailProduct(props) {
   const [checkinfo,setCheckinfo] = useState(false);
   const [lastcus, setLastcus] = useState({}); 
   const [checkInfoCus,setCheckInfoCus] = useState(true);
+  const [urlQr, setUrlQr] = useState("");
   // const [email, setEmail] = useState([]);
   const getProducer = (arr,item)=>{
     const getInfoProducer = arr[2]; 
@@ -49,39 +50,43 @@ export default function DetailProduct(props) {
       }); 
     return email; 
   }
-  const getCustomer = (arr,item,dbRef) => { 
-    const getInfoCustomer = arr[2][item]['history'];
-    let date = '';
-    let quantity = 0;
-    let cusEmail = '';
-    let listCus = [];
-    let total = 0;
-    if(getInfoCustomer.length !== 0) {   
-      for(const i in getInfoCustomer){
-        let itemHistory = getInfoCustomer[i]; 
-        date = new Date(itemHistory["time"]).toLocaleString(); 
-        quantity=itemHistory['quantity']; 
-        cusEmail = getInfoCus(itemHistory["ownerId"],dbRef); 
-        total+=itemHistory['quantity'];   
-        listCus.push({date,quantity,cusEmail}); 
-      }   
-     
-      setLastcus(
-        {
-          datetime: listCus[listCus.length-1].date,
-          total: total
-        }
-      ) 
-      return listCus;
-    }  
-    return [];
-  }    
+  const getCustomer = useCallback(
+    (arr,item) => { 
+      const dbRef = ref(getDatabase());  
+      const getInfoCustomer = arr[2][item]['history'];
+      let date = '';
+      let quantity = 0;
+      let cusEmail = '';
+      let listCus = [];
+      let total = 0;
+      if(getInfoCustomer.length !== 0) {   
+        for(const i in getInfoCustomer){
+          let itemHistory = getInfoCustomer[i]; 
+          date = new Date(itemHistory["time"]).toLocaleString(); 
+          quantity=itemHistory['quantity']; 
+          cusEmail = getInfoCus(itemHistory["ownerId"],dbRef); 
+          total+=itemHistory['quantity'];   
+          listCus.push({date,quantity,cusEmail}); 
+        }   
+       
+        setLastcus(
+          {
+            datetime: listCus[listCus.length-1].date,
+            total: total
+          }
+        ) 
+        return listCus;
+      }  
+      return [];
+    },[]  
+  )
    
   useEffect(() => {     
     const dbRef = ref(getDatabase());  
     let params = searchParams.get("makeby"); 
     let item = searchParams.get("item"); 
     if(params && item){  
+    setUrlQr('https://hang-that.herokuapp.com/tracuu?makeby='+params+'&item='+item);
     const arr = []; 
     get(child(dbRef,'/user_data/list_user_data/'+ params)).then((snapshot) => {
       if (snapshot.exists()) { 
@@ -90,7 +95,7 @@ export default function DetailProduct(props) {
         } 
         if(arr[2][item]===undefined) return;
         setListProperties(arr[2][item]["listProperties"]); 
-        setInfoCustomer(getCustomer(arr,item,dbRef));
+        setInfoCustomer(getCustomer(arr,item));
         setInfoProducer(getProducer(arr,item));
          return;
       } else {
@@ -102,13 +107,15 @@ export default function DetailProduct(props) {
       return
     });      
    }  
-  })  
+  },[searchParams,getCustomer])  
+
+  
   useEffect(() => { 
-    if(infoCustomer.length === 0){
+    if(!infoCustomer){
       setCheckInfoCus(false);
     }else setCheckInfoCus(true);
     return;
-  },[infoCustomer.length]);
+  },[infoCustomer]);
 
   const showInfoToast= () =>{
     Notification({
@@ -148,9 +155,13 @@ export default function DetailProduct(props) {
         <Row>
           <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
             <div className="detail-product__image">
-              <QRCode value={window.location.href} 
+              <QRCode value={urlQr}   
+                  removeQrCodeBehindLogo = {true}
+                  quietZone = {8}
+                  bgColor = "#FFFFFF"
                   logoImage={logo}  
-                  logoWidth={20} /> 
+                  logoWidth={20}
+                   /> 
             </div>
           </Col>
           <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
