@@ -111,7 +111,7 @@ export default function DetailProduct(props) {
 
   
   useEffect(() => { 
-    if(!infoCustomer){
+    if(infoCustomer.length === 0){
       setCheckInfoCus(false);
     }else setCheckInfoCus(true);
     return;
