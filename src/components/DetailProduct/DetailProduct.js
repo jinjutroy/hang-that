@@ -1,11 +1,12 @@
 import { child, get, getDatabase, ref } from "firebase/database";
 import React,{ useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap"; 
-import QRCode from "react-qr-code";
+import { Col, Container, Row } from "react-bootstrap";  
+import { QRCode } from "react-qrcode-logo";
 import {  useSearchParams } from "react-router-dom";
 import Loading from "../Loading/Loading";
 import { Notification } from "../Notification/Notification";
-import "./DetailProduct.css";
+import "./DetailProduct.css"; 
+import logo from "../../images/logo.png";
 
 export default function DetailProduct(props) { 
   const [listProperties,setListProperties] = useState([]);
@@ -13,7 +14,9 @@ export default function DetailProduct(props) {
   const [infoProducer, setInfoProducer] = useState([]);
   const [infoCustomer,setInfoCustomer] = useState([]);
   const [checkinfo,setCheckinfo] = useState(false);
-  const [lastcus, setLastcus] = useState({});
+  const [lastcus, setLastcus] = useState({}); 
+  const [checkInfoCus,setCheckInfoCus] = useState(true);
+  // const [email, setEmail] = useState([]);
   const getProducer = (arr,item)=>{
     const getInfoProducer = arr[2]; 
     let email = arr[3];
@@ -26,38 +29,55 @@ export default function DetailProduct(props) {
       }  
     } 
     quantity = getInfoProducer[item]["quantity"] - quantityProductOfCus; 
-    if(email && quantity !== 0 && date){  
+    if(email && date){  
       return [email,date,quantity] 
     }
+    console.log([email,date,quantity] );
     return [] 
   }
-  const getCustomer = (arr,item) => { 
+  const getInfoCus =  (id,dbRef)=>{
+    if(id === "") return;
+    let email = [];
+    get(child(dbRef,'/user_data/list_user_data/'+ id)).then((snapshot) => {
+          if (snapshot.exists()) {    
+            // return snapshot.val()["loginName"];  
+            return snapshot.val();
+          }  
+      }).then((user) => { 
+        email.push(user["loginName"]) 
+        return ;
+      }); 
+    return email; 
+  }
+  const getCustomer = (arr,item,dbRef) => { 
     const getInfoCustomer = arr[2][item]['history'];
     let date = '';
     let quantity = 0;
-    let cusId = '';
+    let cusEmail = '';
     let listCus = [];
     let total = 0;
-    if(getInfoCustomer){  
+    if(getInfoCustomer.length !== 0) {   
       for(const i in getInfoCustomer){
         let itemHistory = getInfoCustomer[i]; 
         date = new Date(itemHistory["time"]).toLocaleString(); 
         quantity=itemHistory['quantity']; 
-        cusId = itemHistory['customerId']; 
-        listCus.push({date,quantity,cusId}); 
-        total+=itemHistory['quantity'];
-      }  
+        cusEmail = getInfoCus(itemHistory["ownerId"],dbRef); 
+        total+=itemHistory['quantity'];   
+        listCus.push({date,quantity,cusEmail}); 
+      }   
+     
       setLastcus(
         {
           datetime: listCus[listCus.length-1].date,
           total: total
         }
-      )
+      ) 
       return listCus;
     }  
     return [];
-  }  
-  useEffect(() => {   
+  }    
+   
+  useEffect(() => {     
     const dbRef = ref(getDatabase());  
     let params = searchParams.get("makeby"); 
     let item = searchParams.get("item"); 
@@ -65,13 +85,14 @@ export default function DetailProduct(props) {
     const arr = []; 
     get(child(dbRef,'/user_data/list_user_data/'+ params)).then((snapshot) => {
       if (snapshot.exists()) { 
-        for (const variable in snapshot.val()) {
+        for (const variable in snapshot.val()) { 
           arr.push(snapshot.val()[variable])
         } 
         if(arr[2][item]===undefined) return;
         setListProperties(arr[2][item]["listProperties"]); 
-        setInfoCustomer(getCustomer(arr,item));
+        setInfoCustomer(getCustomer(arr,item,dbRef));
         setInfoProducer(getProducer(arr,item));
+         return;
       } else {
         console.log("No data available");
         return;
@@ -79,12 +100,16 @@ export default function DetailProduct(props) {
     }).catch((error) => {
       console.error(error);
       return
-    }); 
-    
-    
-   } 
-  },[searchParams]) 
-  
+    });      
+   }  
+  },[searchParams])  
+  useEffect(() => { 
+    if(infoCustomer.length === 0){
+      setCheckInfoCus(false);
+    }else setCheckInfoCus(true);
+    return;
+  },[infoCustomer.length]);
+
   const showInfoToast= () =>{
     Notification({
       title: "Thông báo!",
@@ -109,10 +134,10 @@ export default function DetailProduct(props) {
     list.classList.remove("show-block");
   }   
  
-  if (infoProducer.length === 0 && infoCustomer.length === 0) {
+  if (infoProducer.length === 0 && infoCustomer.length === 0) { 
     setTimeout(async() => { 
-      await setCheckinfo(true);
-    }, 3000);
+      await setCheckinfo(true); 
+    }, 3000); 
     return <div className="detail-product-loading">
       {checkinfo?<div className="no-info-detail-product">Không tìm thấy thông tin của sản phẩm này.</div>: <Loading />}
     </div>
@@ -123,8 +148,9 @@ export default function DetailProduct(props) {
         <Row>
           <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
             <div className="detail-product__image">
-              <QRCode value="Hello everyone" />
-              {/* <img src={""} alt="Ảnh sản phẩm" /> */}
+              <QRCode value={window.location.href} 
+                  logoImage={logo}  
+                  logoWidth={20} /> 
             </div>
           </Col>
           <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
@@ -166,9 +192,15 @@ export default function DetailProduct(props) {
               <div className="info-custommer">
               <Row>
                 <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
-                  <button onClick={handlerCus} className="list-custommer-item__passersby"> 
-                    <div><span>{lastcus.datetime}</span> <span>Khách vãng lai</span></div>
-                    <div><span>Tổng số lượng</span><span>{lastcus.total}</span></div> 
+                 
+                  <button onClick={!checkInfoCus?null:handlerCus} className="list-custommer-item__passersby"> 
+                  {
+                    !checkInfoCus?<span>Chưa có giao dịch nào cho sản phẩm này!</span>:
+                    <div>
+                      <div><span>{lastcus.datetime}</span> <span>Khách vãng lai</span></div>
+                      <div><span>Tổng số lượng</span><span>{lastcus.total}</span></div> 
+                    </div>
+                  }
                   </button>
                 </Col>
                 <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
@@ -188,9 +220,9 @@ export default function DetailProduct(props) {
            <h3>Được mua từ: </h3> 
            <button onClick={handlerCloseListCus} className="list-custommer__close"><i className="fas fa-times"></i></button>
            </div>
-            {infoCustomer.map((Customer,index) =>{
+            {infoCustomer.map((Customer,index) =>{  
                     return <div key={index} className="list-custommer-item__detail"> 
-                       <div><span> CustomerID: {Customer.cusId}</span> <span></span></div>
+                       <div><span> Customer: {Customer.cusEmail[0]}</span> <span></span></div>
                       <div><span>{Customer.date}</span><span></span></div>
                     </div>
             })}

@@ -2,7 +2,7 @@
     position: relative;
     margin: 0 auto;
     width: 100px;  
-    padding-top: 10%;
+    padding-top: 160px;
 }
 .loader:before {
     content: '';
@@ -48,16 +48,16 @@
 }
 @keyframes color {
     100%, 0% {
-        stroke: #d62d20;
+        stroke: #008744;
    }
     40% {
-        stroke: #0057e7;
+        stroke: #008744;
    }
     66% {
         stroke: #008744;
    }
     80%, 90% {
-        stroke: #ffa700;
+        stroke: #008744;
    }
 } 
 .showbox {

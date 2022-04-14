@@ -4,6 +4,10 @@
     box-shadow:  0 0 10px rgba(0, 0, 0, 0.1) ;
     border-radius: 10px; 
 } 
+.detail-product__image{
+   display: flex;
+   justify-content: center; 
+}
 .detail-product__image img {
     width: 90%;
     height: 90%;
@@ -14,9 +18,11 @@
 
 } 
 /* qr code */
-.detail-product__image svg {
-    width: 90%;
-    height: 90%;
+.detail-product__image canvas {
+    width: 90% !important;
+    height: 90% !important;
+    max-width: 425px;
+    max-height: 425px;
     margin: 5%;  
     padding: 5%; 
     box-shadow:  0 0 10px rgba(0, 0, 0, 0.2) ;
@@ -136,7 +142,7 @@ font-weight: 500;
 }
 .list-custommer-item__detail > div,
 .list-producer-item__producer > div,
-.list-custommer-item__passersby > div{
+.list-custommer-item__passersby > div >div{
     display: flex;
     justify-content: space-between;
     align-items: center;
