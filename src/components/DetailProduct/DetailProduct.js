@@ -102,7 +102,7 @@ export default function DetailProduct(props) {
       return
     });      
    }  
-  },[searchParams])  
+  })  
   useEffect(() => { 
     if(infoCustomer.length === 0){
       setCheckInfoCus(false);
