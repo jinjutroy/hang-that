@@ -59,7 +59,7 @@ export default function DetailProduct(props) {
       let cusEmail = '';
       let listCus = [];
       let total = 0;
-      if(getInfoCustomer.length !== 0) {   
+      if(getInfoCustomer) {   
         for(const i in getInfoCustomer){
           let itemHistory = getInfoCustomer[i]; 
           date = new Date(itemHistory["time"]).toLocaleString(); 
