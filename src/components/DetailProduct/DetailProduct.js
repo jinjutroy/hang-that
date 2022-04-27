@@ -160,7 +160,7 @@ export default function DetailProduct(props) {
                   quietZone = {8}
                   bgColor = "#FFFFFF"
                   logoImage={logo}  
-                  logoWidth={20}
+                  logoWidth={30}
                    /> 
             </div>
           </Col>
