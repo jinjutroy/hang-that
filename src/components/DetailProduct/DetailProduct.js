@@ -9,7 +9,7 @@ import "./DetailProduct.css";
 import logo from "../../images/logo.png";
 
 export default function DetailProduct(props) { 
-  const [listProperties,setListProperties] = useState([]);
+  const [listProperties,setListProperties] = useState();
   const [searchParams, setSearchParams] = useSearchParams();    
   const [infoProducer, setInfoProducer] = useState([]);
   const [infoCustomer,setInfoCustomer] = useState([]);
@@ -94,7 +94,7 @@ export default function DetailProduct(props) {
           arr.push(snapshot.val()[variable])
         } 
         if(arr[2][item]===undefined) return;
-        setListProperties(arr[2][item]["listProperties"]); 
+        setListProperties(arr[2][item]["name"]);  
         setInfoCustomer(getCustomer(arr,item));
         setInfoProducer(getProducer(arr,item));
          return;
@@ -141,7 +141,7 @@ export default function DetailProduct(props) {
     list.classList.remove("show-block");
   }   
  
-  if (infoProducer.length === 0 && infoCustomer.length === 0) { 
+  if (infoProducer.length === 0 && infoCustomer.length === 0 ) { 
     setTimeout(async() => { 
       await setCheckinfo(true); 
     }, 3000); 
@@ -166,23 +166,19 @@ export default function DetailProduct(props) {
           </Col>
           <Col xxl={6} xl={6} lg={6} md={12} sm={12} xs={12}>
             <div className="detail-product-listInfo">
-              <h3 className="detail-product__name">Thông tin sản phẩm </h3>
-              {listProperties.map((info, index) => {
-                return (
-                  <div key={index} className="detail-product-item">
+              <h3 className="detail-product__name">Thông tin sản phẩm </h3>  
+                  <div className="detail-product-item">
                     <Row >
                       <Col xxl={4} xl={4} lg={4} md={12} sm={12} xs={12}>
-                        <div className="detail-product-item__name">{info.name}</div>
+                        <div className="detail-product-item__name">{"Tên sản phẩm"}</div>
                       </Col>
                       <Col xxl={8} xl={8} lg={8} md={12} sm={12} xs={12}>
                         <div className="detail-product-item__desc">
-                          {info.value}
+                          {listProperties}
                         </div>
                       </Col>
                     </Row>
-                  </div> 
-                );
-              })}
+                  </div>  
               <div className="detail-product-item__note">
                 *** Chú ý:  Nếu bạn đã mua sản phẩm này. Hãy kiểm tra các giao dịch với khách vãng lai sau, nếu không có thời gian nào trùng khớp với giao dịch của bạn thì rất có thể sản phẩm này là giả.
               </div>
